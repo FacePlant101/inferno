@@ -9,7 +9,9 @@ pub fn set_current_thread_realtime(priority_hint: u8) -> Result<(), Error> {
 
   set_thread_priority_and_policy(
     thread_native_id(),
-    ThreadPriority::Crossplatform(ThreadPriorityValue::try_from(priority_hint).unwrap()),
+    ThreadPriority::Crossplatform(
+      ThreadPriorityValue::try_from(priority_hint.min(ThreadPriorityValue::MAX)).unwrap(),
+    ),
     ThreadSchedulePolicy::Realtime(RealtimeThreadSchedulePolicy::Fifo),
   )
 }
